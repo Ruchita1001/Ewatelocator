@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Scanner</title>
+    <link rel="stylesheet" href="scanrewardcss.css"> <!-- Linking CSS -->
+</head>
+
+<body>
+
+    <!-- Scanner Container -->
+    <div class="scanner-container" id="scanner">
+        <h2>Scan QR Code</h2>
+        <div class="scan-box">
+            <video id="qr-video" autoplay></video>
+        </div>
+        <canvas id="qr-canvas" hidden></canvas>
+    </div>
+
+    <!-- Success Message (Hidden Initially) -->
+    <div id="success-message" class="hidden">
+        <h2>✅ Scan Successful!</h2>
+        <p>You earned reward points!</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script>
+        const video = document.getElementById("qr-video");
+        const canvas = document.getElementById("qr-canvas");
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+        const scanner = document.getElementById("scanner");
+        const successMessage = document.getElementById("success-message");
+
+        async function startScanner() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+                video.srcObject = stream;
+                setInterval(scanQRCode, 500);
+            } catch (err) {
+                alert("⚠ Camera access denied! Please allow camera permissions.");
+            }
+        }
+
+        function scanQRCode() {
+            if (typeof jsQR === "undefined") return;
+            if (video.readyState !== video.HAVE_ENOUGH_DATA) return;
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const qrCode = jsQR(imageData.data, imageData.width, imageData.height);
+
+            if (qrCode) {
+                console.log("✅ QR Code Detected:", qrCode.data);
+                sendQRCode(qrCode.data);
+            }
+        }
+
+        function sendQRCode(qrData) {
+            fetch("ProcessScan", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "qrData=" + encodeURIComponent(qrData)
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log("✅ Response from server:", data);
+
+                // REMOVE ANY PREVIOUS MESSAGES
+                if (document.getElementById("messageBox")) {
+                    document.getElementById("messageBox").remove();
+                }
+
+                let messageBox = document.createElement("div");
+                messageBox.id = "messageBox";
+                messageBox.style.position = "absolute";
+                messageBox.style.top = "10px";
+                messageBox.style.left = "50%";
+                messageBox.style.transform = "translateX(-50%)";
+                messageBox.style.padding = "10px";
+                messageBox.style.borderRadius = "5px";
+                messageBox.style.fontSize = "18px";
+                messageBox.style.fontWeight = "bold";
+                messageBox.style.textAlign = "center";
+
+                if (data === "SUCCESS") {
+                    showSuccessMessage(); // Show success message only for a successful scan
+                    messageBox.innerText = "✅ Scan Successful! You earned points.";
+                    messageBox.style.backgroundColor = "#4CAF50";
+                    messageBox.style.color = "white";
+                } else if (data === "ALREADY_SCANNED") {
+                    messageBox.innerText = "⚠️ Already Scanned! You cannot scan this center again today.";
+                    messageBox.style.backgroundColor = "#FFA500";
+                    messageBox.style.color = "black";
+                    hideSuccessMessage(); // Hide success message if scan was already done
+                } else if (data === "INVALID_CENTER") {
+                    messageBox.innerText = "❌ Invalid QR Code!";
+                    messageBox.style.backgroundColor = "red";
+                    messageBox.style.color = "white";
+                    hideSuccessMessage();
+                } else if (data === "SESSION_EXPIRED") {
+                    messageBox.innerText = "⚠️ Session expired. Please log in again.";
+                    messageBox.style.backgroundColor = "red";
+                    messageBox.style.color = "white";
+                    hideSuccessMessage();
+                } else {
+                    messageBox.innerText = "❌ Error processing scan. Try again.";
+                    messageBox.style.backgroundColor = "red";
+                    messageBox.style.color = "white";
+                    hideSuccessMessage();
+                }
+
+                document.body.appendChild(messageBox);
+                setTimeout(() => messageBox.remove(), 4000);
+            });
+        }
+
+        function showSuccessMessage() {
+            scanner.classList.add("hidden"); // Hide scanner
+            successMessage.classList.remove("hidden"); // Show success message
+        }
+
+        function hideSuccessMessage() {
+            scanner.classList.remove("hidden"); // Show scanner again
+            successMessage.classList.add("hidden"); // Hide success message
+        }
+
+        document.addEventListener("DOMContentLoaded", startScanner);
+    </script>
+
+</body>
+</html>

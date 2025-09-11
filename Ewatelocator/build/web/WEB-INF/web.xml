@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <servlet>
+        <servlet-name>Loginservlet</servlet-name>
+        <servlet-class>Loginservlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>Login</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserUpdateServlet</servlet-name>
+        <servlet-class>UserUpdateServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Adminpage</servlet-name>
+        <servlet-class>Adminpage</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Loginservlet</servlet-name>
+        <url-pattern>/Loginservlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserUpdateServlet</servlet-name>
+        <url-pattern>/UserUpdateServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Adminpage</servlet-name>
+        <url-pattern>/Adminpage</url-pattern>
+    </servlet-mapping>
+
+    <!-- ✅ FeedbackServlet Added Here -->
+       <servlet>
+        <servlet-name>SubmitFeedbackServlet</servlet-name>
+        <servlet-class>SubmitFeedbackServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SubmitFeedbackServlet</servlet-name>
+        <url-pattern>/SubmitFeedbackServlet</url-pattern>
+    </servlet-mapping>
+
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+</web-app>

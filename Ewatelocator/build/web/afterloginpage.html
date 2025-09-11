@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" href="afterloginpage.css">
+    <!-- Add Google Maps API script -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+    <style>
+        /* Add custom CSS styles here */
+        #map-container {
+            height: 300px; /* Adjust the height as needed */
+            margin-top: 20px;
+        }
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+        .phonepe-info {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .phonepe-info .info-box {
+            text-align: center;
+        }
+        .phonepe-info .info-box img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+    </style>
+    <script>
+        // Initialize Google Map
+        function initMap() {
+            // Specify map options
+            const mapOptions = {
+                center: { lat: 0, lng: 0 }, // Set default center
+                zoom: 10, // Set default zoom level
+            };
+
+            // Create map instance
+            const map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+            // Add search bar
+            const input = document.getElementById("search-input");
+            const searchBox = new google.maps.places.SearchBox(input);
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+            // Bias the SearchBox results towards current map's viewport
+            map.addListener("bounds_changed", () => {
+                searchBox.setBounds(map.getBounds());
+            });
+        }
+    </script>
+</head>
+
+<body onload="initMap()">
+    <!-- Navbar -->
+    <section class="header">
+        <nav>
+            <!-- Navigation links -->
+            <div class="nav-links">
+                <ul>
+                    <li><a href="index.html">HOME</a></li>
+                    <li><a href="">ABOUT</a></li>
+                    <li><a href="login.html">LOGIN</a></li>
+                    <li><a href="">CONTACT</a></li>
+                </ul>
+            </div>
+        </nav>
+    </section>
+
+    <!-- Search Bar -->
+    <section class="search-bar">
+        <input id="search-input" type="text" placeholder="Search for e-waste facilities">
+    </section>
+
+    <!-- Map Section -->
+    <section id="map-container">
+        <div id="map"></div>
+    </section>
+
+    <!-- PhonePe Info Section -->
+    <section class="phonepe-info">
+        <div class="info-box">
+            <img src="offerimg" alt="offers">
+            <h3>Offers</h3>
+            <p>Check all offers</p>
+        </div>
+        <div class="info-box">
+            <img src="rwardimg.webp" alt="Rewards">
+            <h3>Rewards</h3>
+            <p>View your rewards</p>
+        </div>
+        <div class="info-box">
+            <img src="referimg.jpg" alt="Refer and Earn">
+            <h3>Refer & Earn</h3>
+            <p>Refer friends and earn rewards</p>
+        </div>
+    </section>
+</body>
+
+</html>
