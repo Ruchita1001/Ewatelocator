@@ -2,26 +2,27 @@
 
 ## About
 
-E-Waste Facility Locator is a simple web application that helps users find nearby e-waste collection and recycling centers. The project aims to encourage proper disposal of electronic waste.
+E-Waste Facility Locator is a web-based application developed using Java, JSP, Servlets, JDBC, and MySQL. The system helps users locate nearby e-waste collection centers and encourages responsible e-waste disposal through a reward-based recycling system.
 
 ## Features
 
-- Search nearby e-waste facilities
-- Easy to use interface
-- Responsive design
-- Supports responsible e-waste disposal
+- User Registration & Login
+- Find Nearby E-Waste Collection Centers
+- Scan QR Code to Dispose E-Waste
+- Earn Reward Points after Successful Scan
+- View Reward Points
+- Simple and Responsive User Interface
 
 ## Tech Stack
 
+- Java
+- JSP
+- Servlets
+- JDBC
+- MySQL
 - HTML
 - CSS
-- JavaScript
-
-## How to Run
-
-1. Download the repository.
-2. Open the project folder.
-3. Run `index.html` in your browser.
+- Bootstrap
 
 ## Author
 
